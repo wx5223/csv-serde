@@ -132,7 +132,7 @@ public final class CSVSerde extends AbstractSerDe {
     Text rowText = (Text) blob;
 
     try {
-      final String[] strings = this.csvParser.parseLine(rowText.toString());
+      final String[] strings = this.csvParser.parseLineMulti(rowText.toString());
 
       for (String thisRow : strings) {
         if (strings != null) {
