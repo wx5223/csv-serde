@@ -129,10 +129,13 @@ public final class CSVSerde extends AbstractSerDe {
 
   @Override
   public Object deserialize(final Writable blob) throws SerDeException {
-    Text rowText = (Text) blob;
+    String rowString = blob.toString();
 
     try {
-      final String[] strings = this.csvParser.parseLineMulti(rowText.toString());
+      final String[] strings;
+      if (rowString.contains("\\v")) {
+        strings = this.csvParser.parseLine(rowString);
+      } else { strings = this.csvParser.parseLineMulti(rowString); }
 
       for (String thisRow : strings) {
         if (strings != null) {
