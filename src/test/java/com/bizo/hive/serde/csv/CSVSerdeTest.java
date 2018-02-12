@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.hadoop.hive.serde.serdeConstants;
+import org.apache.hadoop.hive.serde2.OpenCSVSerde;
 import org.apache.hadoop.io.Text;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +13,30 @@ import static org.junit.Assert.assertEquals;
 
 public final class CSVSerdeTest {
   private final CSVSerde csv = new CSVSerde();
+  private final OpenCSVSerde oc = new OpenCSVSerde();
   final Properties props = new Properties();
 
   @Before
   public void setup() throws Exception {
     props.put(serdeConstants.LIST_COLUMNS, "a,b,c,d");
     props.put(serdeConstants.LIST_COLUMN_TYPES, "string,string,string,string");
+  }
+
+  @Test
+  public void testEscapeDeserialize() throws Exception {
+    props.put("escapeChar", "\005");
+    oc.initialize(null, props);
+
+    final Text in = new Text("hello,\"yes, \\okay\\\\005\"\"\",1,\"new\nline\"");
+    final List<String> row = (List<String>) oc.deserialize(in);
+    System.out.println(row.get(1));
+    csv.initialize(null, props);
+    final List<String> row1 = (List<String>) csv.deserialize(in);
+    System.out.println(row1);
+    /*assertEquals("hello", row.get(0));
+    assertEquals("yes, okay", row.get(1));
+    assertEquals("1", row.get(2));
+    assertEquals("new<LF>line", row.get(3));*/
   }
 
   @Test
