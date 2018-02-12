@@ -44,6 +44,15 @@ create table my_table(a string, b string, ...)
 ;
 ```
 
+for default csv like mongoexport csv file
+```
+CREATE TABLE mytable(a string)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde' 
+WITH SERDEPROPERTIES ( "separatorChar" = ',', "quoteChar" = '"', "escapeChar" = '\005' )
+STORED AS INPUTFORMAT 'com.shawn.hive.serde.CSVTextInputFormat' 
+OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat';
+```
+
 ## Files
 
 The following include opencsv along with the serde, so only the single jar is needed.  Currently built against Hive 0.11.0, but should be compatible with other hive versions.
