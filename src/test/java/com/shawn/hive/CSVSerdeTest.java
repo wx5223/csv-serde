@@ -1,8 +1,9 @@
-package com.bizo.hive.serde.csv;
+package com.shawn.hive;
 
 import java.util.List;
 import java.util.Properties;
 
+import com.bizo.hive.serde.csv.CSVSerde;
 import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.OpenCSVSerde;
 import org.apache.hadoop.io.Text;
@@ -20,6 +21,11 @@ public final class CSVSerdeTest {
   public void setup() throws Exception {
     props.put(serdeConstants.LIST_COLUMNS, "a,b,c,d");
     props.put(serdeConstants.LIST_COLUMN_TYPES, "string,string,string,string");
+  }
+
+  @Test
+  public void testMaxSize() throws Exception {
+    System.out.println(Integer.MAX_VALUE);
   }
 
   @Test
